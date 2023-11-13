@@ -1,0 +1,15 @@
+network:
+  ethernets:
+{% for item in (network.interfaces.keys() | list) %}
+{% if network.interfaces[item].type == "dhcp4" %}
+    {{ item }}:
+      dhcp4: true
+{% endif %}{% if network.interfaces[item].type == "static" %}
+    {{ item }}:
+      addresses:
+{% for address in network.interfaces[item].addresses %}
+        - {{ address.ip }}/{{ address.prefix }}
+{% endfor %}
+{% endif %}
+{% endfor %}
+  version: 2
